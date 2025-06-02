@@ -66,10 +66,14 @@ const getDetailProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
     try {
-        const { page, limit } = req.query;
-        console.log('>>>>>>>req.query: ', req.query);
+        const { page, limit, sort, order, name } = req.query;
 
-        const data = await getProductsServices(page, limit);
+        const pageNum = parseInt(page, 10) || 1;
+        const limitNum = parseInt(limit, 10) || 5;
+        const sortBy = sort || 'createdAt'; // mặc định sort theo ngày tạo
+        const sortOrder = order === 'asc' ? 1 : -1; // mặc định là giảm dần
+
+        const data = await getProductsServices(pageNum, limitNum, sortBy, sortOrder, name);
 
         return res.status(200).json(data);
     } catch (error) {

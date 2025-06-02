@@ -127,32 +127,38 @@ const getDetailProductService = async (id) => {
     }
 };
 
-const getProductsServices = async (page = 1, limit = 5) => {
+const getProductsServices = async (page, limit, sortBy, sortOrder, name) => {
+    console.log('🚀 ~ getProductsServices ~ sort:', sortBy);
     try {
-        const pageNum = parseInt(page, 10) || 1;
-        const limitNum = parseInt(limit, 10) || 5;
-
         // số sản phẩm cần bỏ qua
-        const skip = (pageNum - 1) * limitNum;
+        const skip = (page - 1) * limit;
+
+        // Lọc theo tên nếu có tham số name (không phân biệt hoa thường)
+        const filter = {};
+        if (name) {
+            filter.name = { $regex: name, $options: 'i' }; // i = ignore case
+        }
+
+        const sortOption = { [sortBy || 'createdAt']: sortOrder || -1 };
 
         // Lấy danh sách sản phẩm theo trang
-        const products = await Product.find().skip(skip).limit(limitNum);
+        const products = await Product.find(filter).skip(skip).limit(limit).sort(sortOption);
 
         // Đếm tổng số sản phẩm trong database
-        const total = await Product.countDocuments();
+        const total = await Product.countDocuments(filter);
 
         // Tính tổng số trang
-        const totalPages = Math.ceil(total / limitNum);
+        const totalPages = Math.ceil(total / limit);
 
         return {
             status: 'Ok',
             message: 'Truy vấn Thành Công!',
             data: products,
             pagination: {
-                currentPage: pageNum,
+                currentPage: page,
                 totalPages: totalPages,
                 totalItems: total,
-                limit: limitNum,
+                limit: limit,
             },
         };
     } catch (error) {
