@@ -8,8 +8,6 @@ const userSchema = new Schema(
         password: { type: String, required: true },
         phone: { type: String, required: true },
         isAdmin: { type: Boolean, default: false, required: true },
-        // access_token: { type: String, required: true },
-        // refresh_token: { type: String, required: true },
     },
     {
         timestamps: true,
