@@ -116,7 +116,7 @@ const updateUser = async (req, res) => {
         const data = await updateUserServices(userId, req.body);
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
@@ -144,7 +144,7 @@ const getDetailUser = async (req, res) => {
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };

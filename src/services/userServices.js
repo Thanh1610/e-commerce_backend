@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const validator = require('validator');
 const { generateAccessToken, generateRefreshToken } = require('./jwtServices');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -96,12 +97,7 @@ const updateUserServices = async (id, data) => {
         const checkUser = await User.findOne({ _id: id });
 
         if (!checkUser) {
-            return { error: 'User không tồn tại.' };
-        }
-
-        //hash password trước khi update
-        if (data.password) {
-            data.password = await bcrypt.hash(data.password, saltRounds);
+            return { error: 'Sản phẩm không tồn tại.' };
         }
 
         // Kiểm tra định dạng email nếu có cập nhật

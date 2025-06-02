@@ -1,4 +1,10 @@
-const { createProductService } = require('../services/productServices');
+const {
+    createProductService,
+    updateProductService,
+    getDetailProductService,
+    getProductsServices,
+    deleteProductServices,
+} = require('../services/productServices');
 
 const createProduct = async (req, res) => {
     try {
@@ -21,6 +27,70 @@ const createProduct = async (req, res) => {
     }
 };
 
+const updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+
+        if (!productId) {
+            return res.status(400).json({ message: 'Thiếu productId.' });
+        }
+
+        const data = await updateProductServices(productId, req.body);
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
+const getDetailProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        console.log(productId);
+
+        if (!productId) {
+            return {
+                status: 'ERR',
+                message: 'id sản phẩm không tồn tại!',
+            };
+        }
+        const data = await getDetailProductService(productId);
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
+const getProducts = async (req, res) => {
+    try {
+        const data = await getProductsServices();
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
+const deleteProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const data = await deleteProductServices(productId);
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
 module.exports = {
     createProduct,
+    updateProduct,
+    getDetailProduct,
+    getProducts,
+    deleteProduct,
 };
