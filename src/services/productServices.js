@@ -127,13 +127,33 @@ const getDetailProductService = async (id) => {
     }
 };
 
-const getProductsServices = async (id) => {
+const getProductsServices = async (page = 1, limit = 5) => {
     try {
-        const products = await Product.find();
+        const pageNum = parseInt(page, 10) || 1;
+        const limitNum = parseInt(limit, 10) || 5;
+
+        // số sản phẩm cần bỏ qua
+        const skip = (pageNum - 1) * limitNum;
+
+        // Lấy danh sách sản phẩm theo trang
+        const products = await Product.find().skip(skip).limit(limitNum);
+
+        // Đếm tổng số sản phẩm trong database
+        const total = await Product.countDocuments();
+
+        // Tính tổng số trang
+        const totalPages = Math.ceil(total / limitNum);
+
         return {
             status: 'Ok',
             message: 'Truy vấn Thành Công!',
             data: products,
+            pagination: {
+                currentPage: pageNum,
+                totalPages: totalPages,
+                totalItems: total,
+                limit: limitNum,
+            },
         };
     } catch (error) {
         console.error('Update user service error:', error);
