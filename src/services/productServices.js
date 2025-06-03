@@ -128,7 +128,6 @@ const getDetailProductService = async (id) => {
 };
 
 const getProductsServices = async (page, limit, sortBy, sortOrder, name) => {
-    console.log('🚀 ~ getProductsServices ~ sort:', sortBy);
     try {
         // số sản phẩm cần bỏ qua
         const skip = (page - 1) * limit;
