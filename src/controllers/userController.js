@@ -98,7 +98,15 @@ const handleLogin = async (req, res) => {
         }
 
         const data = await handleLoginServices(email, password);
-        return res.status(200).json(data);
+
+        const { refresh_token, ...newData } = data;
+
+        // Lưu refresh_token vào cookie
+        res.cookie('refresh_token', refresh_token, {
+            Secure: true,
+            HttpOnly: true,
+        });
+        return res.status(200).json(newData);
     } catch (error) {
         console.error('Login error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
@@ -161,8 +169,9 @@ const getAllUser = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
+    console.log('>>>>>>req.cookies: ', req.cookies);
     try {
-        const token = req?.headers?.authorization?.split(' ')[1];
+        const token = req?.cookies?.refresh_token;
         console.log(token);
 
         if (!token) {

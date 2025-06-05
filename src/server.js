@@ -3,11 +3,13 @@ const express = require('express');
 const connection = require('./config/database');
 const routes = require('./routes/index');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(cors());
+app.use(cookieParser());
 
 //config req.body
 app.use(express.json()); // for json

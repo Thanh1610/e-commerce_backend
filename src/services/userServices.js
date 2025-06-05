@@ -29,13 +29,20 @@ const createUserService = async (name, email, password, phone) => {
         const user = await User.findOne({ email });
 
         if (user) {
-            console.log(`Email đã tồn tại, vui lòng dùng email khác ${email}`);
-            return null;
+            return {
+                EC: 1,
+                EM: 'Email đã tồn tại, vui lòng dùng email khác',
+            };
         }
 
         const hashPassword = await bcrypt.hash(password, saltRounds);
 
-        return await User.create({ name, email, password: hashPassword, phone });
+        const data = await User.create({ name, email, password: hashPassword, phone });
+        return {
+            EC: 0,
+            EM: 'Đăng kí thành công',
+            data,
+        };
     } catch (error) {
         console.log(error);
         return null;
@@ -67,6 +74,7 @@ const handleLoginServices = async (email, password) => {
                 const refresh_token = await generateRefreshToken(payload);
                 return {
                     EC: 0,
+                    EM: 'Đăng nhập thành công !',
                     access_token,
                     refresh_token,
                     user: {

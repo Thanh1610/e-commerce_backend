@@ -17,7 +17,7 @@ userRouter.get('/', (req, res) => {
 });
 
 userRouter.get('/users', auth, getAllUser);
-userRouter.get('/detail-user/:id', auth, getDetailUser);
+userRouter.get('/detail-user/:id', getDetailUser);
 
 userRouter.post('/register', createUser);
 userRouter.post('/create-admin', createAdmin);
