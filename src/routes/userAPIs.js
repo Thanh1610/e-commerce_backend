@@ -7,6 +7,7 @@ const {
     getDetailUser,
     createAdmin,
     refreshToken,
+    handleLogout,
 } = require('../controllers/userController');
 const express = require('express');
 const auth = require('../middleware/auth');
@@ -22,6 +23,7 @@ userRouter.get('/detail-user/:id', getDetailUser);
 userRouter.post('/register', createUser);
 userRouter.post('/create-admin', createAdmin);
 userRouter.post('/login', handleLogin);
+userRouter.post('/logout', handleLogout);
 userRouter.post('/refresh-token', refreshToken);
 
 userRouter.put('/update-user/:id', updateUser);

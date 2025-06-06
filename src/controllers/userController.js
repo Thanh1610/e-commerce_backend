@@ -116,6 +116,20 @@ const handleLogin = async (req, res) => {
     }
 };
 
+const handleLogout = async (req, res) => {
+    try {
+        res.clearCookie('refresh_token');
+
+        return res.status(200).json({
+            status: 'OK',
+            message: 'Đăng xuất thành công!',
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
 const updateUser = async (req, res) => {
     try {
         const userId = req.params.id;
@@ -199,4 +213,5 @@ module.exports = {
     deleteUser,
     createAdmin,
     refreshToken,
+    handleLogout,
 };
