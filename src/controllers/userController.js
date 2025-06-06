@@ -102,10 +102,13 @@ const handleLogin = async (req, res) => {
         const { refresh_token, ...newData } = data;
 
         // Lưu refresh_token vào cookie
+
         res.cookie('refresh_token', refresh_token, {
-            Secure: true,
-            HttpOnly: true,
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
         });
+
         return res.status(200).json(newData);
     } catch (error) {
         console.error('Login error:', error);
@@ -169,10 +172,8 @@ const getAllUser = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
-    console.log('>>>>>>req.cookies: ', req.cookies);
     try {
         const token = req?.cookies?.refresh_token;
-        console.log(token);
 
         if (!token) {
             return res.status(200).json({
