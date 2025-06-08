@@ -67,6 +67,8 @@ const handleLoginServices = async (email, password) => {
                     email: user.email,
                     name: user.name,
                     id: user._id,
+                    phone: user.phone,
+                    adress: user.adress,
                     isAdmin: user.isAdmin,
                 };
 
@@ -81,6 +83,8 @@ const handleLoginServices = async (email, password) => {
                         email: user.email,
                         name: user.name,
                         id: user._id,
+                        phone: user.phone,
+                        adress: user.adress,
                         isAdmin: user.isAdmin,
                     },
                 };
@@ -120,7 +124,7 @@ const updateUserServices = async (id, data) => {
 
         const updateUser = await User.findByIdAndUpdate(id, data, { new: true }).select('-password');
         return {
-            status: 'Ok',
+            status: 'OK',
             message: 'Sửa Thành Công!',
             data: updateUser,
         };
