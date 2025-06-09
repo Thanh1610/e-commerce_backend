@@ -69,7 +69,7 @@ const getProducts = async (req, res) => {
         const { page, limit, sort, order, name } = req.query;
 
         const pageNum = parseInt(page, 10) || 1;
-        const limitNum = parseInt(limit, 10) || 5;
+        const limitNum = parseInt(limit, 10) || 6;
         const sortBy = sort || 'createdAt'; // mặc định sort theo ngày tạo
         const sortOrder = order === 'asc' ? 1 : -1; // mặc định là giảm dần
 
