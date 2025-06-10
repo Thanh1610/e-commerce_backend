@@ -18,6 +18,7 @@ const productSchema = new Schema(
             default: 0,
         },
         description: { type: String },
+        isSale: { type: Boolean, default: false },
     },
     {
         timestamps: true,

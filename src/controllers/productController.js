@@ -16,7 +16,6 @@ const createProduct = async (req, res) => {
                 message: 'Vui lòng nhâp đầy đủ thông tin!',
             });
         }
-        console.log(req.body);
 
         const data = await createProductService(req.body);
 

@@ -2,13 +2,13 @@ const Product = require('../models/product');
 
 const createProductService = async (data) => {
     try {
-        const { name, image, type, price, countInStock, rating, description } = data;
+        const { name, image, type, price, countInStock, rating, description, isSale } = data;
 
         const product = await Product.findOne({ name });
 
         if (product) {
             return {
-                status: 'OK',
+                status: 'ERR',
                 message: `Sản phẩm đã tồn tại, vui lòng chọn sản phẩm khác !`,
             };
         }
@@ -21,10 +21,11 @@ const createProductService = async (data) => {
             countInStock,
             rating,
             description,
+            isSale,
         });
 
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Thêm sản phẩm thành công!',
             data: newProduct,
         };
