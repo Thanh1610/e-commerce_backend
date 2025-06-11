@@ -2,7 +2,7 @@ const Product = require('../models/product');
 
 const createProductService = async (data) => {
     try {
-        const { name, image, type, price, countInStock, rating, description, isSale } = data;
+        const { name, image, type, price, countInStock, rating, description, isSale, selled, oldPrice } = data;
 
         const product = await Product.findOne({ name });
 
@@ -22,6 +22,8 @@ const createProductService = async (data) => {
             rating,
             description,
             isSale,
+            selled,
+            oldPrice,
         });
 
         return {
@@ -93,7 +95,7 @@ const updateProductService = async (id, data) => {
         const updateProduct = await Product.findByIdAndUpdate(id, data, { new: true });
 
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Cập nhật sản phẩm thành công!',
             data: updateProduct,
         };

@@ -34,11 +34,11 @@ const updateProduct = async (req, res) => {
             return res.status(400).json({ message: 'Thiếu productId.' });
         }
 
-        const data = await updateProductServices(productId, req.body);
+        const data = await updateProductService(productId, req.body);
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('updateProduct error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
