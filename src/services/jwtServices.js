@@ -1,13 +1,13 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
-const generateAccessToken = async (payload) => {
+const genneralAccessToken = async (payload) => {
     return jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE,
     });
 };
 
-const generateRefreshToken = async (payload) => {
+const genneralRefreshToken = async (payload) => {
     return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
         expiresIn: process.env.JWT_REFRESH_EXPIRE,
     });
@@ -22,9 +22,9 @@ const refreshTokenServices = async (token) => {
         //Kiểm tra token có hợp lệ k và giải mã
         const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 
-        const newAccessToken = await generateAccessToken({
+        const newAccessToken = await genneralAccessToken({
             id: decoded?.id,
-            isAdminid: decoded?.isAdmin,
+            isAdmin: decoded?.isAdmin,
         });
 
         return {
@@ -39,7 +39,7 @@ const refreshTokenServices = async (token) => {
 };
 
 module.exports = {
-    generateAccessToken,
-    generateRefreshToken,
+    genneralAccessToken,
+    genneralRefreshToken,
     refreshTokenServices,
 };

@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const validator = require('validator');
-const { generateAccessToken, generateRefreshToken } = require('./jwtServices');
+const { genneralAccessToken, genneralRefreshToken } = require('./jwtServices');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -72,8 +72,8 @@ const handleLoginServices = async (email, password) => {
                     isAdmin: user.isAdmin,
                 };
 
-                const access_token = await generateAccessToken(payload);
-                const refresh_token = await generateRefreshToken(payload);
+                const access_token = await genneralAccessToken(payload);
+                const refresh_token = await genneralRefreshToken(payload);
                 return {
                     EC: 0,
                     EM: 'Đăng nhập thành công !',
