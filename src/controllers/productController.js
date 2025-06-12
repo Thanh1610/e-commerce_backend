@@ -4,6 +4,7 @@ const {
     getDetailProductService,
     getProductsServices,
     deleteProductServices,
+    deleteManyServices,
 } = require('../services/productServices');
 
 const createProduct = async (req, res) => {
@@ -93,10 +94,30 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const deleteMany = async (req, res) => {
+    try {
+        const ids = req.body;
+
+        if (!ids) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'Ids là bắt buộc',
+            });
+        }
+        const data = await deleteManyServices(ids);
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
 module.exports = {
     createProduct,
     updateProduct,
     getDetailProduct,
     getProducts,
     deleteProduct,
+    deleteMany,
 };

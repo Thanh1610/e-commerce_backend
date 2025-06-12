@@ -192,10 +192,26 @@ const deleteProductServices = async (id) => {
     }
 };
 
+const deleteManyServices = async (ids) => {
+    try {
+        const deleteProduct = await Product.deleteMany({ _id: { $in: ids } });
+
+        return {
+            status: 'Ok',
+            message: 'Xóa sản phẩm Thành Công!',
+            data: deleteProduct,
+        };
+    } catch (error) {
+        console.error('Delete Product service error:', error);
+        return { error: 'Lỗi server.' };
+    }
+};
+
 module.exports = {
     createProductService,
     updateProductService,
     getDetailProductService,
     getProductsServices,
     deleteProductServices,
+    deleteManyServices,
 };

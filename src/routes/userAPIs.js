@@ -8,6 +8,7 @@ const {
     createAdmin,
     refreshToken,
     handleLogout,
+    deleteMany,
 } = require('../controllers/userController');
 const express = require('express');
 const auth = require('../middleware/auth');
@@ -29,5 +30,6 @@ userRouter.post('/refresh-token', refreshToken);
 userRouter.put('/update-user/:id', updateUser);
 
 userRouter.delete('/delete-user/:id', auth, deleteUser);
+userRouter.delete('/delete-many', auth, deleteMany);
 
 module.exports = userRouter;

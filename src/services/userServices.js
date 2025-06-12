@@ -23,7 +23,7 @@ const createAdminService = async (name, email, password, phone, isAdmin) => {
     }
 };
 
-const createUserService = async (name, email, password, phone) => {
+const createUserService = async (name, email, password, phone, adress, avatar) => {
     try {
         //check exist
         const user = await User.findOne({ email });
@@ -37,7 +37,7 @@ const createUserService = async (name, email, password, phone) => {
 
         const hashPassword = await bcrypt.hash(password, saltRounds);
 
-        const data = await User.create({ name, email, password: hashPassword, phone });
+        const data = await User.create({ name, email, password: hashPassword, phone, adress, avatar });
         return {
             EC: 0,
             EM: 'Đăng kí thành công',
@@ -96,7 +96,7 @@ const handleLoginServices = async (email, password) => {
             };
         }
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('handleLoginServices error:', error);
         return {
             EC: -1,
             EM: 'Đã xảy ra lỗi máy chủ.',
@@ -129,7 +129,7 @@ const updateUserServices = async (id, data) => {
             data: updateUser,
         };
     } catch (error) {
-        console.error('Update user service error:', error);
+        console.error('updateUserServices error:', error);
         return { error: 'Lỗi server.' };
     }
 };
@@ -149,7 +149,7 @@ const deleteUserServices = async (id) => {
             data: deleteUser,
         };
     } catch (error) {
-        console.error('Update user service error:', error);
+        console.error('deleteUserServices error:', error);
         return { error: 'Lỗi server.' };
     }
 };
@@ -163,7 +163,7 @@ const getAllUserServices = async (id) => {
             data: users,
         };
     } catch (error) {
-        console.error('Update user service error:', error);
+        console.error('getAllUserServices error:', error);
         return { error: 'Lỗi server.' };
     }
 };
@@ -182,7 +182,21 @@ const getDetailUserServices = async (id) => {
             data: user,
         };
     } catch (error) {
-        console.error('Update user service error:', error);
+        console.error('getDetailUserServices error:', error);
+        return { error: 'Lỗi server.' };
+    }
+};
+
+const deleteManyServices = async (userIds) => {
+    try {
+        const deleteUser = await User.deleteMany({ _id: { $in: userIds } });
+        return {
+            status: 'Ok',
+            message: 'Xóa Thành Công!',
+            data: deleteUser,
+        };
+    } catch (error) {
+        console.error('deleteManyServices error:', error);
         return { error: 'Lỗi server.' };
     }
 };
@@ -195,4 +209,5 @@ module.exports = {
     deleteUserServices,
     getAllUserServices,
     getDetailUserServices,
+    deleteManyServices,
 };

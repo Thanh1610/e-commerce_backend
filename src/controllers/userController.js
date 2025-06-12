@@ -7,13 +7,14 @@ const {
     deleteUserServices,
     getAllUserServices,
     getDetailUserServices,
+    deleteManyServices,
 } = require('../services/userServices');
 
 const { refreshTokenServices } = require('../services/jwtServices');
 
 const createUser = async (req, res) => {
     try {
-        const { name, email, password, confirmPassword, phone } = req.body;
+        const { name, email, password, confirmPassword, phone, adress, avatar } = req.body;
 
         // const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         // const isCheckEmail = emailReg.test(email);
@@ -42,11 +43,11 @@ const createUser = async (req, res) => {
             });
         }
 
-        const data = await createUserService(name, email, password, phone);
+        const data = await createUserService(name, email, password, phone, adress, avatar);
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('createUser:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
@@ -125,7 +126,7 @@ const handleLogout = async (req, res) => {
             message: 'Đăng xuất thành công!',
         });
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('handleLogout error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
@@ -141,7 +142,7 @@ const updateUser = async (req, res) => {
         const data = await updateUserServices(userId, req.body);
         return res.status(200).json(data);
     } catch (error) {
-        console.error('error:', error);
+        console.error('updateUser error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
@@ -157,7 +158,7 @@ const deleteUser = async (req, res) => {
         const data = await deleteUserServices(userId);
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('deleteUser error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
@@ -169,7 +170,7 @@ const getDetailUser = async (req, res) => {
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('error:', error);
+        console.error('getDetailUser error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
@@ -180,7 +181,7 @@ const getAllUser = async (req, res) => {
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('getAllUser error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
@@ -199,7 +200,26 @@ const refreshToken = async (req, res) => {
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('refreshToken error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
+const deleteMany = async (req, res) => {
+    try {
+        const userIds = req.body;
+
+        if (!userIds) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'userIds là bắt buộc',
+            });
+        }
+
+        const data = await deleteManyServices(userIds);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('deleteMany error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
@@ -214,4 +234,5 @@ module.exports = {
     createAdmin,
     refreshToken,
     handleLogout,
+    deleteMany,
 };
