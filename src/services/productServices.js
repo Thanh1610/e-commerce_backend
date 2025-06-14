@@ -1,3 +1,4 @@
+const { toSlug } = require('../config/toSlug');
 const Product = require('../models/product');
 
 const createProductService = async (data) => {
@@ -32,8 +33,8 @@ const createProductService = async (data) => {
             data: newProduct,
         };
     } catch (error) {
-        console.log(error);
-        return null;
+        console.error('createProductService error:', error);
+        return { error: 'Lỗi server.' };
     }
 };
 
@@ -100,11 +101,8 @@ const updateProductService = async (id, data) => {
             data: updateProduct,
         };
     } catch (error) {
-        console.error('Lỗi cập nhật sản phẩm:', error);
-        return {
-            status: 'ERR',
-            message: 'Lỗi máy chủ khi cập nhật sản phẩm',
-        };
+        console.error('updateProductService error:', error);
+        return { error: 'Lỗi server.' };
     }
 };
 
@@ -120,13 +118,13 @@ const getDetailProductService = async (id) => {
         }
 
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Truy vấn sản phẩm thành công!',
             data: product,
         };
     } catch (error) {
-        console.log(error);
-        return null;
+        console.error('getDetailProductService error:', error);
+        return { error: 'Lỗi server.' };
     }
 };
 
@@ -153,7 +151,7 @@ const getProductsServices = async (page, limit, sortBy, sortOrder, name) => {
         const totalPages = Math.ceil(total / limit);
 
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Truy vấn Thành Công!',
             data: products,
             pagination: {
@@ -164,7 +162,7 @@ const getProductsServices = async (page, limit, sortBy, sortOrder, name) => {
             },
         };
     } catch (error) {
-        console.error('Update user service error:', error);
+        console.error('getProductsServices error:', error);
         return { error: 'Lỗi server.' };
     }
 };
@@ -182,12 +180,12 @@ const deleteProductServices = async (id) => {
         const deleteProduct = await Product.findByIdAndDelete(id);
 
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Xóa sản phẩm Thành Công!',
             data: deleteProduct,
         };
     } catch (error) {
-        console.error('Delete Product service error:', error);
+        console.error('deleteProductServices error:', error);
         return { error: 'Lỗi server.' };
     }
 };
@@ -197,12 +195,34 @@ const deleteManyServices = async (ids) => {
         const deleteProduct = await Product.deleteMany({ _id: { $in: ids } });
 
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Xóa sản phẩm Thành Công!',
             data: deleteProduct,
         };
     } catch (error) {
-        console.error('Delete Product service error:', error);
+        console.error('deleteManyServices error:', error);
+        return { error: 'Lỗi server.' };
+    }
+};
+
+const searchProductsServices = async (q, type) => {
+    try {
+        const limit = type === 'more' ? 12 : 6;
+
+        const keyword = toSlug(q);
+        const products = await Product.find({
+            name: { $regex: keyword, $options: 'i' },
+        })
+            .limit(limit)
+            .sort({ createdAt: -1 });
+
+        return {
+            status: 'SUCCESS',
+            message: 'Tìm kiếm Thành Công!',
+            data: products,
+        };
+    } catch (error) {
+        console.error('searchProducts error:', error);
         return { error: 'Lỗi server.' };
     }
 };
@@ -214,4 +234,5 @@ module.exports = {
     getProductsServices,
     deleteProductServices,
     deleteManyServices,
+    searchProductsServices,
 };

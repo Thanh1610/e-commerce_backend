@@ -28,7 +28,7 @@ const refreshTokenServices = async (token) => {
         });
 
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Tạo mới accessToken Thành Công!',
             newAccessToken,
         };

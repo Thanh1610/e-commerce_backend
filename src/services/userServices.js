@@ -124,7 +124,7 @@ const updateUserServices = async (id, data) => {
 
         const updateUser = await User.findByIdAndUpdate(id, data, { new: true }).select('-password');
         return {
-            status: 'OK',
+            status: 'SUCCESS',
             message: 'Sửa Thành Công!',
             data: updateUser,
         };
@@ -144,7 +144,7 @@ const deleteUserServices = async (id) => {
 
         const deleteUser = await User.findByIdAndDelete(id).select('-password');
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Xóa Thành Công!',
             data: deleteUser,
         };
@@ -158,7 +158,7 @@ const getAllUserServices = async (id) => {
     try {
         const users = await User.find().select('-password');
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Truy vấn Thành Công!',
             data: users,
         };
@@ -177,7 +177,7 @@ const getDetailUserServices = async (id) => {
         }
 
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Truy vấn Thành Công!',
             data: user,
         };
@@ -191,7 +191,7 @@ const deleteManyServices = async (userIds) => {
     try {
         const deleteUser = await User.deleteMany({ _id: { $in: userIds } });
         return {
-            status: 'Ok',
+            status: 'SUCCESS',
             message: 'Xóa Thành Công!',
             data: deleteUser,
         };

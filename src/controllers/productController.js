@@ -5,6 +5,7 @@ const {
     getProductsServices,
     deleteProductServices,
     deleteManyServices,
+    searchProductsServices,
 } = require('../services/productServices');
 
 const createProduct = async (req, res) => {
@@ -113,6 +114,27 @@ const deleteMany = async (req, res) => {
     }
 };
 
+const searchProducts = async (req, res) => {
+    try {
+        const q = req.query.q;
+        const type = req.query.type === 'more' ? 'more' : 'less';
+
+        if (!q.trim()) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'Từ khóa tìm kiếm không hợp lệ.',
+            });
+        }
+
+        const data = await searchProductsServices(q, type);
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
 module.exports = {
     createProduct,
     updateProduct,
@@ -120,4 +142,5 @@ module.exports = {
     getProducts,
     deleteProduct,
     deleteMany,
+    searchProducts,
 };

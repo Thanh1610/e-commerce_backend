@@ -6,15 +6,18 @@ const {
     getProducts,
     deleteProduct,
     deleteMany,
+    searchProducts,
 } = require('../controllers/productController');
 const auth = require('../middleware/auth');
 
 const productRouter = express.Router();
 
-productRouter.post('/create', createProduct);
-productRouter.put('/update/:id', auth, updateProduct);
 productRouter.get('/details/:id', getDetailProduct);
 productRouter.get('/products', getProducts);
+productRouter.get('/search', searchProducts);
+
+productRouter.post('/create', createProduct);
+productRouter.put('/update/:id', auth, updateProduct);
 productRouter.delete('/delete/:id', auth, deleteProduct);
 productRouter.delete('/delete-many', auth, deleteMany);
 

@@ -122,7 +122,7 @@ const handleLogout = async (req, res) => {
         res.clearCookie('refresh_token');
 
         return res.status(200).json({
-            status: 'OK',
+            status: 'SUCCESS',
             message: 'Đăng xuất thành công!',
         });
     } catch (error) {
