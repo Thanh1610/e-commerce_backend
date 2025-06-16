@@ -128,6 +128,28 @@ const getDetailProductService = async (id) => {
     }
 };
 
+const getDetailProductBySlugService = async (slug) => {
+    try {
+        const product = await Product.findOne({ slug });
+
+        if (!product) {
+            return {
+                status: 'ERR',
+                message: `Sản phẩm không tồn tại !`,
+            };
+        }
+
+        return {
+            status: 'SUCCESS',
+            message: 'Truy vấn sản phẩm thành công!',
+            data: product,
+        };
+    } catch (error) {
+        console.error('getDetailProductService error:', error);
+        return { error: 'Lỗi server.' };
+    }
+};
+
 const getProductsServices = async (page, limit, sortBy, sortOrder, name) => {
     try {
         // số sản phẩm cần bỏ qua
@@ -235,4 +257,5 @@ module.exports = {
     deleteProductServices,
     deleteManyServices,
     searchProductsServices,
+    getDetailProductBySlugService,
 };

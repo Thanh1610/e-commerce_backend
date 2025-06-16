@@ -6,6 +6,7 @@ const {
     deleteProductServices,
     deleteManyServices,
     searchProductsServices,
+    getDetailProductBySlugService,
 } = require('../services/productServices');
 
 const createProduct = async (req, res) => {
@@ -48,7 +49,6 @@ const updateProduct = async (req, res) => {
 const getDetailProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        console.log(productId);
 
         if (!productId) {
             return {
@@ -57,6 +57,25 @@ const getDetailProduct = async (req, res) => {
             };
         }
         const data = await getDetailProductService(productId);
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
+const getDetailProductBySlug = async (req, res) => {
+    try {
+        const productSlug = req.params.slug;
+
+        if (!productSlug) {
+            return {
+                status: 'ERR',
+                message: 'Slug không tồn tại!',
+            };
+        }
+        const data = await getDetailProductBySlugService(productSlug);
 
         return res.status(200).json(data);
     } catch (error) {
@@ -143,4 +162,5 @@ module.exports = {
     deleteProduct,
     deleteMany,
     searchProducts,
+    getDetailProductBySlug,
 };
