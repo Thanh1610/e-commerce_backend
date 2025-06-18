@@ -150,7 +150,7 @@ const getDetailProductBySlugService = async (slug) => {
     }
 };
 
-const getProductsServices = async (page, limit, sortBy, sortOrder, name) => {
+const getProductsServices = async (page, limit, sortBy, sortOrder, name, type) => {
     try {
         // số sản phẩm cần bỏ qua
         const skip = (page - 1) * limit;
@@ -159,6 +159,10 @@ const getProductsServices = async (page, limit, sortBy, sortOrder, name) => {
         const filter = {};
         if (name) {
             filter.name = { $regex: name, $options: 'i' }; // i = ignore case
+        }
+
+        if (type) {
+            filter.type = type;
         }
 
         const sortOption = { [sortBy || 'createdAt']: sortOrder || -1 };
@@ -249,6 +253,21 @@ const searchProductsServices = async (q, type) => {
     }
 };
 
+const getAllTypeServices = async () => {
+    try {
+        const types = await Product.distinct('type');
+
+        return {
+            status: 'SUCCESS',
+            message: 'Thành Công!',
+            data: types,
+        };
+    } catch (error) {
+        console.error('getAllTypeServices error:', error);
+        return { error: 'Lỗi server.' };
+    }
+};
+
 module.exports = {
     createProductService,
     updateProductService,
@@ -258,4 +277,5 @@ module.exports = {
     deleteManyServices,
     searchProductsServices,
     getDetailProductBySlugService,
+    getAllTypeServices,
 };

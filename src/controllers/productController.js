@@ -7,6 +7,7 @@ const {
     deleteManyServices,
     searchProductsServices,
     getDetailProductBySlugService,
+    getAllTypeServices,
 } = require('../services/productServices');
 
 const createProduct = async (req, res) => {
@@ -86,14 +87,14 @@ const getDetailProductBySlug = async (req, res) => {
 
 const getProducts = async (req, res) => {
     try {
-        const { page, limit, sort, order, name } = req.query;
+        const { page, limit, sort, order, name, type } = req.query;
 
-        const pageNum = parseInt(page, 10) || 1;
-        const limitNum = parseInt(limit, 10) || 6;
+        const pageNum = parseInt(page, 10) || undefined;
+        const limitNum = parseInt(limit, 10) || undefined;
         const sortBy = sort || 'createdAt'; // mặc định sort theo ngày tạo
         const sortOrder = order === 'asc' ? 1 : -1; // mặc định là giảm dần
 
-        const data = await getProductsServices(pageNum, limitNum, sortBy, sortOrder, name);
+        const data = await getProductsServices(pageNum, limitNum, sortBy, sortOrder, name, type);
 
         return res.status(200).json(data);
     } catch (error) {
@@ -154,6 +155,17 @@ const searchProducts = async (req, res) => {
     }
 };
 
+const getAllType = async (req, res) => {
+    try {
+        const data = await getAllTypeServices();
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
 module.exports = {
     createProduct,
     updateProduct,
@@ -163,4 +175,5 @@ module.exports = {
     deleteMany,
     searchProducts,
     getDetailProductBySlug,
+    getAllType,
 };

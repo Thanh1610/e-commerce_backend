@@ -8,6 +8,7 @@ const {
     deleteMany,
     searchProducts,
     getDetailProductBySlug,
+    getAllType,
 } = require('../controllers/productController');
 const auth = require('../middleware/auth');
 
@@ -17,6 +18,7 @@ productRouter.get('/details/:id', getDetailProduct);
 productRouter.get('/details/slug/:slug', getDetailProductBySlug);
 productRouter.get('/products', getProducts);
 productRouter.get('/search', searchProducts);
+productRouter.get('/get-all-type', getAllType);
 
 productRouter.post('/create', createProduct);
 productRouter.put('/update/:id', auth, updateProduct);
