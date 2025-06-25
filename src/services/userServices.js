@@ -23,7 +23,7 @@ const createAdminService = async (name, email, password, phone, isAdmin) => {
     }
 };
 
-const createUserService = async (name, email, password, phone, adress, avatar) => {
+const createUserService = async (name, email, password, phone, address, avatar) => {
     try {
         //check exist
         const user = await User.findOne({ email });
@@ -37,7 +37,7 @@ const createUserService = async (name, email, password, phone, adress, avatar) =
 
         const hashPassword = await bcrypt.hash(password, saltRounds);
 
-        const data = await User.create({ name, email, password: hashPassword, phone, adress, avatar });
+        const data = await User.create({ name, email, password: hashPassword, phone, address, avatar });
         return {
             EC: 0,
             EM: 'Đăng kí thành công',
@@ -68,7 +68,7 @@ const handleLoginServices = async (email, password) => {
                     name: user.name,
                     id: user._id,
                     phone: user.phone,
-                    adress: user.adress,
+                    address: user.address,
                     isAdmin: user.isAdmin,
                 };
 
@@ -84,7 +84,7 @@ const handleLoginServices = async (email, password) => {
                         name: user.name,
                         id: user._id,
                         phone: user.phone,
-                        adress: user.adress,
+                        address: user.address,
                         isAdmin: user.isAdmin,
                     },
                 };

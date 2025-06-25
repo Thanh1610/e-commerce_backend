@@ -14,7 +14,7 @@ const { refreshTokenServices } = require('../services/jwtServices');
 
 const createUser = async (req, res) => {
     try {
-        const { name, email, password, confirmPassword, phone, adress, avatar } = req.body;
+        const { name, email, password, confirmPassword, phone, address, avatar } = req.body;
 
         // const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         // const isCheckEmail = emailReg.test(email);
@@ -43,7 +43,7 @@ const createUser = async (req, res) => {
             });
         }
 
-        const data = await createUserService(name, email, password, phone, adress, avatar);
+        const data = await createUserService(name, email, password, phone, address, avatar);
 
         return res.status(200).json(data);
     } catch (error) {
