@@ -84,7 +84,7 @@ const createAdmin = async (req, res) => {
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('createAdmin error:', error);
         return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
     }
 };
