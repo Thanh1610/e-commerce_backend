@@ -1,4 +1,4 @@
-const { createOrderService } = require('../services/cartServices');
+const { createOrderService, getOrdersService, deleteOrderService } = require('../services/cartServices');
 
 const createOrder = async (req, res) => {
     try {
@@ -31,6 +31,44 @@ const createOrder = async (req, res) => {
     }
 };
 
+const getOrders = async (req, res) => {
+    try {
+        const userId = req.query.id;
+        if (!userId) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'Thiếu UserId',
+            });
+        }
+
+        const data = await getOrdersService(userId);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('getOrders error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
+const deleteOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        if (!orderId) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'Thiếu orderId',
+            });
+        }
+
+        const data = await deleteOrderService(orderId);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('deleteOrder error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
 module.exports = {
     createOrder,
+    getOrders,
+    deleteOrder,
 };

@@ -30,4 +30,54 @@ const createOrderService = async (data) => {
         return { error: 'Lỗi server.' };
     }
 };
-module.exports = { createOrderService };
+
+const getOrdersService = async (userId) => {
+    try {
+        const orders = await Cart.find({ user: userId }).sort({ createdAt: -1 });
+        if (!orders) {
+            return {
+                status: 'ERR',
+                message: 'Không có dữ liệu',
+            };
+        }
+
+        return {
+            status: 'SUCCESS',
+            message: 'Truy vấn thành công!',
+            data: orders,
+        };
+    } catch (error) {
+        console.error('getOrdersService error:', error);
+        return { error: 'Lỗi server.' };
+    }
+};
+
+const deleteOrderService = async (orderId) => {
+    try {
+        const order = await Cart.findById(orderId);
+
+        if (!order) {
+            return {
+                status: 'ERR',
+                message: 'Không có dữ liệu',
+            };
+        }
+
+        if (order.isDelivered) {
+            throw new Error('Đơn hàng đã giao, không thể xoá.');
+        }
+
+        const res = await Cart.findByIdAndDelete(orderId);
+
+        return {
+            status: 'SUCCESS',
+            message: 'Hủy đơn hàng thành công!',
+            data: res,
+        };
+    } catch (error) {
+        console.error('deleteOrderService error:', error);
+        return { error: 'Lỗi server.' };
+    }
+};
+
+module.exports = { createOrderService, getOrdersService, deleteOrderService };
