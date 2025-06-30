@@ -1,10 +1,9 @@
 const { createOrder, getOrders, deleteOrder } = require('../controllers/cartController');
 const express = require('express');
-const auth = require('../middleware/auth');
-const userRouter = express.Router();
+const cartRouter = express.Router();
 
-userRouter.post('/create-order', createOrder);
-userRouter.get('/orders', getOrders);
-userRouter.delete('/delete-order/:id', deleteOrder);
+cartRouter.post('/create-order', createOrder);
+cartRouter.get('/orders', getOrders);
+cartRouter.delete('/delete-order/:id', deleteOrder);
 
-module.exports = userRouter;
+module.exports = cartRouter;

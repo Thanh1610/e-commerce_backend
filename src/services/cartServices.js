@@ -2,7 +2,18 @@ const Cart = require('../models/cart');
 
 const createOrderService = async (data) => {
     try {
-        const { cartItem, paymentMethod, itemsPrice, shippingPrice, totalPrice, fullname, address, phone, user } = data;
+        const {
+            cartItem,
+            paymentMethod,
+            itemsPrice,
+            shippingPrice,
+            totalPrice,
+            fullname,
+            address,
+            phone,
+            user,
+            isPaid = 'false',
+        } = data;
 
         const createOder = await Cart.create({
             cartItem,
@@ -12,6 +23,7 @@ const createOrderService = async (data) => {
                 phone,
             },
             paymentMethod,
+            isPaid,
             itemsPrice,
             shippingPrice,
             totalPrice,
