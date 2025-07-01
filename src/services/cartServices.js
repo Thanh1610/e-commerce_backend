@@ -1,5 +1,6 @@
 const Cart = require('../models/cart');
 const { sendEmailCreateOrder } = require('./emailServices');
+const Product = require('../models/product');
 
 const createOrderService = async (data) => {
     try {
@@ -17,6 +18,23 @@ const createOrderService = async (data) => {
             isPaid = 'false',
         } = data;
 
+        // Kiểm tra tồn kho trước khi tạo đơn hàng
+        for (const item of cartItem) {
+            const product = await Product.findById(item.product);
+            if (!product) {
+                return { status: 'ERR', message: `Sản phẩm không tồn tại!` };
+            }
+            if (product.countInStock === 0) {
+                return { status: 'ERR', message: `Sản phẩm "${product.name}" đã hết hàng!` };
+            }
+            if (product.countInStock < item.amount) {
+                return {
+                    status: 'ERR',
+                    message: `Sản phẩm "${product.name}" chỉ còn ${product.countInStock} sản phẩm!`,
+                };
+            }
+        }
+
         const createOder = await Cart.create({
             cartItem,
             shippingAddress: {
@@ -31,6 +49,15 @@ const createOrderService = async (data) => {
             totalPrice,
             user,
         });
+
+        // Trừ số lượng tồn kho cho từng sản phẩm và tăng số lượng đã bán
+        for (const item of cartItem) {
+            await Product.findByIdAndUpdate(
+                item.product, // hoặc item._id nếu cartItem lưu id sản phẩm ở _id
+                { $inc: { countInStock: -item.amount, selled: item.amount } },
+            );
+        }
+
         await sendEmailCreateOrder(email, cartItem, totalPrice);
 
         if (createOder) {
