@@ -2,8 +2,18 @@ const { createOrderService, getOrdersService, deleteOrderService } = require('..
 
 const createOrder = async (req, res) => {
     try {
-        const { cartItem, paymentMethod, itemsPrice, shippingPrice, totalPrice, fullname, address, phone, user } =
-            req.body;
+        const {
+            cartItem,
+            paymentMethod,
+            itemsPrice,
+            shippingPrice,
+            totalPrice,
+            fullname,
+            address,
+            phone,
+            user,
+            email,
+        } = req.body;
 
         if (
             !cartItem ||
@@ -14,7 +24,8 @@ const createOrder = async (req, res) => {
             !fullname ||
             !address ||
             !phone ||
-            !user
+            !user ||
+            !email
         ) {
             return res.status(200).json({
                 status: 'ERR',

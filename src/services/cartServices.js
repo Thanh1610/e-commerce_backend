@@ -1,4 +1,5 @@
 const Cart = require('../models/cart');
+const { sendEmailCreateOrder } = require('./emailServices');
 
 const createOrderService = async (data) => {
     try {
@@ -12,6 +13,7 @@ const createOrderService = async (data) => {
             address,
             phone,
             user,
+            email,
             isPaid = 'false',
         } = data;
 
@@ -29,6 +31,7 @@ const createOrderService = async (data) => {
             totalPrice,
             user,
         });
+        await sendEmailCreateOrder(email, cartItem, totalPrice);
 
         if (createOder) {
             return {
