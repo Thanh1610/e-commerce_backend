@@ -52,10 +52,9 @@ const createOrderService = async (data) => {
 
         // Trừ số lượng tồn kho cho từng sản phẩm và tăng số lượng đã bán
         for (const item of cartItem) {
-            await Product.findByIdAndUpdate(
-                item.product, // hoặc item._id nếu cartItem lưu id sản phẩm ở _id
-                { $inc: { countInStock: -item.amount, selled: item.amount } },
-            );
+            await Product.findByIdAndUpdate(item.product, {
+                $inc: { countInStock: -item.amount, selled: item.amount },
+            });
         }
 
         await sendEmailCreateOrder(email, cartItem, totalPrice);

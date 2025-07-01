@@ -1,4 +1,5 @@
 const { createOrderService, getOrdersService, deleteOrderService } = require('../services/cartServices');
+const Cart = require('../models/cart');
 
 const createOrder = async (req, res) => {
     try {
@@ -78,8 +79,30 @@ const deleteOrder = async (req, res) => {
     }
 };
 
+const getAllOrders = async (req, res) => {
+    try {
+        const orders = await Cart.find().sort({ createdAt: -1 });
+        if (!orders) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'Lấy danh sách đơn hàng thất bại!',
+                data: orders,
+            });
+        }
+        return res.status(200).json({
+            status: 'SUCCESS',
+            message: 'Lấy danh sách đơn hàng thành công!',
+            data: orders,
+        });
+    } catch (error) {
+        console.error('getAllOrders error:', error);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi máy chủ.' });
+    }
+};
+
 module.exports = {
     createOrder,
     getOrders,
     deleteOrder,
+    getAllOrders,
 };
