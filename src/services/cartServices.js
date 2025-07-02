@@ -104,10 +104,6 @@ const deleteOrderService = async (orderId) => {
             };
         }
 
-        if (order.isDelivered) {
-            throw new Error('Đơn hàng đã giao, không thể xoá.');
-        }
-
         const res = await Cart.findByIdAndDelete(orderId);
 
         return {
@@ -121,4 +117,57 @@ const deleteOrderService = async (orderId) => {
     }
 };
 
-module.exports = { createOrderService, getOrdersService, deleteOrderService };
+const deleteManyServices = async (ids) => {
+    try {
+        const deleteOrder = await Cart.deleteMany({ _id: { $in: ids } });
+
+        return {
+            status: 'SUCCESS',
+            message: 'Xóa sản phẩm Thành Công!',
+            data: deleteOrder,
+        };
+    } catch (error) {
+        console.error('deleteManyServices error:', error);
+        return { error: 'Lỗi server.' };
+    }
+};
+
+const updateStatusService = async (id, data) => {
+    try {
+        // Kiểm tra đơn hàng có tồn tại không
+        const checkOrder = await Cart.findOne({ _id: id });
+
+        if (!checkOrder) {
+            return {
+                status: 'ERR',
+                message: `Đơn hàng không tồn tại`,
+            };
+        }
+
+        const updateFields = {};
+        if (typeof data.isPaid !== 'undefined') {
+            updateFields.isPaid = data.isPaid;
+        }
+        if (typeof data.isDelivered !== 'undefined') {
+            updateFields.isDelivered = data.isDelivered;
+        }
+
+        if (Object.keys(updateFields).length === 0) {
+            return {
+                status: 'ERR',
+                message: 'Không có trường hợp lệ để cập nhật!',
+            };
+        }
+
+        const updatedOrder = await Cart.findByIdAndUpdate(id, updateFields, { new: true });
+
+        return {
+            status: 'SUCCESS',
+            message: 'Cập nhật trạng thái thành công!',
+            data: updatedOrder,
+        };
+    } catch (error) {
+        return { status: 'ERROR', message: 'Cập nhật thất bại!', error: error.message };
+    }
+};
+module.exports = { createOrderService, getOrdersService, deleteOrderService, deleteManyServices, updateStatusService };
