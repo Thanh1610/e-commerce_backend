@@ -231,7 +231,7 @@ const searchProductsServices = async (q, type) => {
 
         const keyword = toSlug(q);
         const products = await Product.find({
-            name: { $regex: keyword, $options: 'i' },
+            $or: [{ name: { $regex: q, $options: 'i' } }, { slug: { $regex: keyword, $options: 'i' } }],
         })
             .limit(limit)
             .sort({ createdAt: -1 });
