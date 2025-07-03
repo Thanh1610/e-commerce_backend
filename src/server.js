@@ -10,7 +10,11 @@ const port = process.env.PORT || 3001;
 
 app.use(
     cors({
-        origin: ['http://localhost:5173', 'https://sybershop.vercel.app'],
+        origin: [
+            'http://localhost:5173',
+            'https://sybershop.vercel.app',
+            'https://sybershop-tatuanthanhs-projects.vercel.app/',
+        ],
         credentials: true,
     }),
 );
